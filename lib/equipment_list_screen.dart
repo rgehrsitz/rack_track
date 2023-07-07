@@ -3,14 +3,23 @@ import 'package:rack_track/equipment.dart';
 import 'package:rack_track/equipment_details_screen.dart';
 
 class EquipmentListScreen extends StatefulWidget {
-  const EquipmentListScreen({super.key});
+  final List<Equipment> initialEquipment;
+
+  const EquipmentListScreen({Key? key, required this.initialEquipment})
+      : super(key: key);
 
   @override
   EquipmentListScreenState createState() => EquipmentListScreenState();
 }
 
 class EquipmentListScreenState extends State<EquipmentListScreen> {
-  List<Equipment> equipmentList = []; // Initialize with your list of equipment
+  late List<Equipment> equipmentList;
+
+  @override
+  void initState() {
+    super.initState();
+    equipmentList = widget.initialEquipment;
+  }
 
   @override
   Widget build(BuildContext context) {
