@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:rack_track/equipment.dart';
 import 'package:rack_track/equipment_list_screen.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
 
 void main() {
   runApp(const RackTrackApp());
