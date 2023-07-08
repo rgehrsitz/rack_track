@@ -1,37 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:rack_track/equipment.dart';
 import 'package:rack_track/equipment_list_screen.dart';
-import 'package:path_provider/path_provider.dart';
-import 'dart:io';
+import 'package:rack_track/data_service.dart';
 
 void main() {
   runApp(const RackTrackApp());
 }
 
-class RackTrackApp extends StatelessWidget {
-  const RackTrackApp({super.key});
+class RackTrackApp extends StatefulWidget {
+  const RackTrackApp({Key? key}) : super(key: key);
+
+  @override
+  _RackTrackAppState createState() => _RackTrackAppState();
+}
+
+class _RackTrackAppState extends State<RackTrackApp> {
+  final dataService = DataService();
+  late List<Equipment> equipment;
+
+  @override
+  void initState() {
+    super.initState();
+    dataService.readEquipment().then((data) {
+      setState(() {
+        equipment = data;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    // Dummy data
-    final equipment = [
-      Equipment(
-        id: '1',
-        name: 'Server 1',
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
-        properties: {'type': 'server', 'firmwareVersion': '1.0.0'},
-        children: [],
-      ),
-      // Add more dummy equipment here
-    ];
-
     return MaterialApp(
       title: 'Rack Track',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: EquipmentListScreen(initialEquipment: equipment),
+      home: EquipmentListScreen(
+        initialEquipment: equipment,
+        onUpdate: (updatedEquipment) {
+          setState(() {
+            equipment = updatedEquipment;
+          });
+          dataService.writeEquipment(equipment);
+        },
+      ),
     );
   }
 }

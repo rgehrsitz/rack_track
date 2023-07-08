@@ -5,8 +5,10 @@ import 'package:uuid/uuid.dart';
 
 class EquipmentListScreen extends StatefulWidget {
   final List<Equipment> initialEquipment;
+  final void Function(List<Equipment>) onUpdate;
 
-  const EquipmentListScreen({Key? key, required this.initialEquipment})
+  const EquipmentListScreen(
+      {Key? key, required this.initialEquipment, required this.onUpdate})
       : super(key: key);
 
   @override
@@ -44,6 +46,7 @@ class EquipmentListScreenState extends State<EquipmentListScreen> {
                       setState(() {
                         equipmentList[index] = updatedEquipment;
                       });
+                      widget.onUpdate(equipmentList);
                     },
                   ),
                 ),
@@ -53,6 +56,7 @@ class EquipmentListScreenState extends State<EquipmentListScreen> {
                 setState(() {
                   equipmentList[index] = updatedEquipment;
                 });
+                widget.onUpdate(equipmentList);
               }
             },
           );
@@ -87,6 +91,7 @@ class EquipmentListScreenState extends State<EquipmentListScreen> {
             setState(() {
               equipmentList.add(updatedEquipment);
             });
+            widget.onUpdate(equipmentList);
           }
         },
       ),
