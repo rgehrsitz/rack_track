@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rack_track/equipment.dart';
 import 'package:rack_track/equipment_details_screen.dart';
+import 'package:uuid/uuid.dart';
 
 class EquipmentListScreen extends StatefulWidget {
   final List<Equipment> initialEquipment;
@@ -55,6 +56,38 @@ class EquipmentListScreenState extends State<EquipmentListScreen> {
               }
             },
           );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: () async {
+          const uuid = Uuid();
+          final newEquipment = Equipment(
+            id: uuid.v4(),
+            name: '',
+            createdAt: DateTime.now(),
+            updatedAt: DateTime.now(),
+            properties: {},
+            children: [],
+          );
+
+          final updatedEquipment = await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => EquipmentDetailsScreen(
+                equipment: newEquipment,
+                onUpdate: (updatedEquipment) {
+                  // No need to do anything here
+                },
+              ),
+            ),
+          );
+
+          if (updatedEquipment != null) {
+            setState(() {
+              equipmentList.add(updatedEquipment);
+            });
+          }
         },
       ),
     );
